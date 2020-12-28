@@ -1,0 +1,27 @@
+body {
+  display        : flex;
+  justify-content: center;
+  align-items    : center;
+  min-height     : 100vh;
+  margin         : 0;
+  background     : hsl(240, 56%, 98%);
+}
+
+:root {
+  --mouse-x: 0;
+  --mouse-y: 0;
+}
+
+
+.target {
+  transform       : translate(var(--mouse-x), var(--mouse-y));
+}
+
+.label {
+  width : 100px;
+  height: 100px;
+  border-radius: 50%;
+  background-color: aqua;
+  text-align: center;
+  line-height: 100px;
+}

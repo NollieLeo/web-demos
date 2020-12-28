@@ -1,0 +1,31 @@
+body {
+  min-height: 100vh;
+  margin    : 0;
+  background: var(--grey-color);
+}
+
+:root {
+  --grey-color: #454344;
+  --mouse-x   : 0;
+  --mouse-y   : 0;
+}
+
+.target {
+  --target-width       : 2rem;
+  --target-color       : white;
+  --target-shadow-color: rgba(0, 0, 0, .7);
+
+  position       : absolute;
+  display        : flex;
+  justify-content: center;
+  align-items    : center;
+  width          : var(--target-width);
+  height         : var(--target-width);
+  border-radius  : 50%;
+  background     : var(--target-shadow-color);
+  transform      : translate(var(--mouse-x), var(--mouse-y));
+}
+
+.target:last-of-type {
+  background: var(--target-color);
+}

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>文字分割渐变</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.5.1/gsap.min.js"></script>
+    <script src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/16327/SplitText3.min.js"></script>
+    <style>
+      body {
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        align-items: center;
+        min-height: 100vh;
+        margin: 0;
+        background: hsl(240, 56%, 98%);
+      }
+      .staggered-land-in {
+        font-size: 40px;
+      }
+      .scale-in-bounce {
+        font-size: 40px;
+        animation: scale-in-bounce 0.4s both;
+        animation-delay: calc(0.1s * var(--i));
+      }
+
+      @keyframes scale-in-bounce {
+        0% {
+          opacity: 0;
+          transform: scale(2);
+        }
+
+        40% {
+          opacity: 0.5;
+          transform: scale(0.8);
+        }
+
+        100% {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="staggered-land-in">I am your daddy, my son</div>
+    <script>
+      const t1 = gsap.timeline();
+      const staggeredLandInText = new SplitText(".staggered-land-in", {
+        type: "chars",
+      });
+      t1.from(staggeredLandInText.chars, {
+        duration: 0.8,
+        opacity: 0,
+        y: "-20%",
+        stagger: 0.05,
+        x:'-10%'
+      });
+    </script>
+    <div class="staggered-scale-in font-bold text-6xl">
+      I am your daddy, my son
+    </div>
+    <script>
+      const t2 = gsap.timeline();
+      const staggeredScaleInText = new SplitText(".staggered-scale-in", {
+        type: "chars",
+      });
+      const staggeredScaleInChars = staggeredScaleInText.chars;
+      staggeredScaleInChars.forEach((item, i) => {
+        item.style.setProperty("--i", `${i}`);
+      });
+      t2.to(staggeredScaleInChars, {
+        className: "scale-in-bounce",
+      });
+    </script>
+  </body>
+</html>

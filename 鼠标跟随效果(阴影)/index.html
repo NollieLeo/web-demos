@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>鼠标跟随效果(阴影)</title>
+    <link rel="stylesheet" type="text/css" href="./index.css" />
+  </head>
+  <body>
+    <script>
+      for (let i = 1; i < 25; i++) {
+        const doms = document.createElement("div");
+        doms.setAttribute("class", "target");
+        doms.style.transitionDuration = `${75 + (25 - i) * 12}ms`;
+        doms.style.opacity = `${(1 / 25) * i}`;
+        doms.style.filter = 'blur(3px)'
+        document.body.append(doms);
+      }
+    </script>
+  </body>
+  <script src="./index.js"></script>
+</html>
