@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>交错延迟</title>
+    <link rel="stylesheet" type="text/css" href="./index.css" />
+  </head>
+  <body>
+    <div class="loading">
+      <script>
+        const r = Math.floor(Math.random() * 255);
+        const g = Math.floor(Math.random() * 255);
+        const b = Math.floor(Math.random() * 255);
+        for (let i = 1; i < 8; i++) {
+          const dom = document.createElement("div");
+          const span = document.createElement("span");
+          span.style.animationDelay = `${i * 0.2}s`;
+          dom.appendChild(span);
+          dom.setAttribute("class", "dot");
+          dom.style.background = `rgba(${r},${g},${b},${(8 - i) * 0.1})`;
+          document.querySelector(".loading").append(dom);
+        }
+      </script>
+    </div>
+  </body>
+</html>
