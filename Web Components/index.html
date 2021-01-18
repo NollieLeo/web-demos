@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Web Components实现自定义组件</title>
+  </head>
+  <body>
+
+    <button is="w-button">btn</button>
+
+    <w-button type="primary" functype="raised">
+      <span slot="btnContent">
+        primary btn
+      </span>
+    </w-button>
+
+    <w-button type="primary" functype="default">
+      <span slot="btnContent">
+        primary btn
+      </span>
+    </w-button>
+    <w-button type="warning">
+      <span slot="btnContent">
+        danger btn
+      </span>
+    </w-button>
+    <w-button type="default">
+      <span slot="btnContent">
+        default btn
+      </span>
+    </w-button>
+
+    <template id="btn1">
+      <slot name="btnContent">button content</slot>
+    </template>
+
+    <script src="./components/Button/Button.js"></script>
+  </body>
+</html>
