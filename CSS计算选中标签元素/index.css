@@ -1,0 +1,35 @@
+[type="checkbox"] {
+  position: absolute;
+  clip    : rect(0 0 0 0);
+}
+
+[type="checkbox"]:checked + .topic {
+  background: skyblue;
+}
+.topic {
+  border-radius: 4px;
+  cursor: pointer;
+  padding: 0 4px;
+  border: 1px solid #ccc;
+}
+
+/* // 在body中创建或者重置计算器 */
+body {
+  counter-reset: topicCounter;
+}
+
+/* // 当checkbox在选中状态时递增变量 */
+:checked+.topic {
+  counter-increment: topicCounter;
+}
+
+/* //使用counter（）函数将计算器的值添加到元素中。 */
+.topic-counter::before {
+  color  : red;
+  content: counter(topicCounter);
+}
+
+.check-item {
+  position: relative;
+  display : inline-block
+}
