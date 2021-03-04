@@ -1,0 +1,45 @@
+.input-control:placeholder-shown::placeholder {
+  color: transparent;
+}
+
+.input-box {
+  position: relative;
+}
+
+.input-label {
+  position      : absolute;
+  left          : 16px;
+  top           : 14px;
+  pointer-events: none;
+}
+
+.input-control {
+  height       : 44px;
+  outline      : none;
+  border-radius: 4px;
+  border       : none;
+  border       : 1px solid #ccc;
+  padding-left : 5px;
+  transition   : .3s ease-in-out;
+}
+
+.input-control:focus {
+  border-color: #2486ff;
+}
+
+.input-control:not(:focus):hover {
+  border-color: black;
+}
+
+.input-label {
+  transition      : .3s;
+  height          : fit-content;
+  background-color: #fff;
+  color           : #ccc;
+}
+
+/* .input-control:not(:placeholder-shown)~.input-label, */
+.input-control:focus~.input-label {
+  color    : #2486ff;
+  transform: scale(0.85) translate(-3px, -29px);
+}
