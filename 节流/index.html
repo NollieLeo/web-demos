@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>节流</title>
+  </head>
+  <body>
+    <div id="block">0</div>
+    <style>
+      #block {
+        width: 200px;
+        height: 200px;
+        background-color: burlywood;
+        color: #fff;
+      }
+    </style>
+    <script>
+      const dom = document.querySelector("#block");
+
+      dom.onmousemove = throttle(handleAdd, 1000);
+
+      let number = 0;
+      function handleAdd() {
+        number++;
+        dom.innerHTML = number;
+      }
+
+      // 节流函数
+      function throttle(callback, expires) {
+        let date = Date.now();
+        let time;
+        return function () {
+          const now = Date.now();
+          clearTimeout(time);
+          if (now - date >= expires) {
+            callback.apply(this, ...arguments);
+            date = now;
+          }else{
+            time = setTimeout(callback.bind(this, ...arguments), expires - (date - now));
+          }
+        };
+      }
+    </script>
+  </body>
+</html>

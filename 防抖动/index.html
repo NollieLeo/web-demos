@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <button id="debouce">点我试试防抖动</button>
+    <script>
+      const btn = document.querySelector("#debouce");
+
+      const btnFn = debouce(
+        (...res) => {
+          console.log(res);
+        },
+        1000,
+        true
+      );
+
+      btn.addEventListener("click", btnFn);
+
+      // 防抖
+      function debouce(callback, timeOut, immediate = false) {
+        let time;
+        return function () {
+          time && clearTimeout(time);
+          if (immediate) {
+            const callNow = !time;
+            time = setTimeout(() => {
+              time = null;
+            }, timeOut);
+            if (callNow) callback.call(this, ...arguments);
+          } else {
+            time = setTimeout(callback.bind(this, ...arguments), timeOut);
+          }
+        };
+      }
+    </script>
+  </body>
+</html>
