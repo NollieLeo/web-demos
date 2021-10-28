@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AOP提取表单校验逻辑</title>
+</head>
+
+<body>
+  <div>
+    <label>用户名：<input id="username" /></label>
+    <label>密码：<input id="password" /></label>
+    <input id="submit" value="提交" type="button" />
+  </div>
+  <script>
+    Function.prototype.before = function (beforeFn) {
+      const _self = this;
+      return function () {
+        if (!beforeFn.apply(this, arguments)) {
+          return
+        }
+        return _self.apply(this, arguments);
+      }
+    }
+    const username = document.querySelector('#username');
+    const password = document.querySelector('#password');
+    const submitBtn = document.querySelector('#submit');
+
+    function formValidate() {
+      if (!username.value || !password.value) {
+        alert('必填项不能为空');
+        return false;
+      }
+      return true
+    }
+
+    let handleSubmit = () => {
+      const send = () => {
+        alert('提交成功')
+      }
+      send();
+    }
+
+    handleSubmit = handleSubmit.before(formValidate);
+
+
+    submitBtn.onclick = handleSubmit;
+
+  </script>
+</body>
+
+</html>
