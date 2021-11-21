@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>useState简易实现</title>
+</head>
+
+<body>
+  <script>
+
+    // 在react中，通过currentFiber是否存在
+    // 来区别是mount过程还是update过程
+    // 这里用一个变量
+    let isMount = true;
+
+    // 通过一个全局变量，来表示当前正在执行的hook
+    let workInProgressHook = null;
+
+    // FC对应的fiber
+    const fiber = {
+      memoizedState: null, // FC的 fiber上这个属性是用来存当前app的多个hooks的, 是一个链表结构
+      stateNode: App, // FC中stateNode保存的是函数组件
+    }
+
+    // scheduel - render -commit 
+    function run() {
+      // hooks初始化操作，将当前的fiber hooks赋值给workInProgressHook
+      workInProgressHook = fiber.memoizedState;
+
+      // 模拟FC render阶段
+      const app = fiber.stateNode();
+
+      // render-commit 结束之后将ismount设置为false
+      isMount = false;
+      return app;
+    }
+
+    // useState的回调是会创建update对象
+    function dispatchAction(queue, action) {
+      const update = {
+        action,
+        next: null
+      }
+
+      if (queue.pending === null) {
+        // 如果不存在这个pending，它会和自己形成一歌环状链表
+        update.next = update;
+      } else {
+        // 已经存在情况下
+        // 例如一个环： 3-> 0 -> 1 -> 2 -> 3， 现在要插入一个4
+        // pending.queue.next: 第一项0 pending.queue最后一项3
+        // 4 -> 0 -> 1 -> 2 -> 3 ->4
+        update.next = queue.pending.next; // 将update下一指针指向pending的第一项
+        queue.pending.next = update;
+      }
+      queue.pending = update;
+      run()
+    }
+
+    function useState(initState) {
+      // hook的数据结构是用来保存update对象的
+      // 是和classComponent和hostComponent保存的数据结构相类似的
+      // 都有一个类似的updateQueue
+      let hook;
+
+      // 这里需要区分mount和update
+      if (isMount) {
+        hook = {
+          queue: {
+            pending: null
+          },
+          memoizedState: initState, // 保存了hooks对应的state属性，mount时候，就是对应的初始值
+          next: null, // next指针用于指向下一个hook
+        }
+
+        // 判断当前的fiber的memoizedState是否存在
+        if (!fiber.memoizedState) {
+          fiber.memoizedState = hook
+        } else {
+          workInProgressHook.next = hook
+        }
+        workInProgressHook = hook;
+      } else {
+        hook = workInProgressHook;
+        workInProgressHook = workInProgressHook.next;
+      }
+
+      // 这里忽略优先级的计算, 所有baseState就等于memoizedState
+      let baseState = hook.memoizedState;
+      // 如果存在，则表明这个hook上有存在的update要计算
+      if (hook.queue.pending) {
+        let firstUpdate = hook.queue.pending.next; // 指向第一个update
+
+        do {
+          const action = firstUpdate.action; // 这里就是useState的保存回调函数的地方，这里就只先支持回调形式
+          baseState = action(baseState);
+          firstUpdate = firstUpdate.next;
+        } while (firstUpdate !== hook.queue.pending.next) // 遍历知道当前的不等于pending的第一项为止
+
+        // 表明fiber上的pending queue中的update都计算完了
+        hook.queue.pending = null;
+      }
+
+      hook.memoizedState = baseState;
+
+      return [baseState, dispatchAction.bind(null, hook.queue)]
+    }
+
+    function App() {
+      // 真实的state会基于优先级的update对象以及baseState计算得出的，这里忽略优先级的计算
+      // 这里只通过baseState基于update得出state
+      // 调用这里useState的updateNum，update的创建计算过程
+      const [num, updateNum] = useState(0);
+      const [num2, updateNum2] = useState(0);
+
+      console.log(`isMount?${isMount}`);
+      console.log(`num:${num}`)
+      console.log(`num2:${num2}`)
+
+      return {
+        onClick() {
+          updateNum(temp => temp + 1);
+        },
+        onClick2() {
+          updateNum2(temp2 => temp2 + 2)
+        }
+      }
+    }
+
+    window.app = run();
+  </script>
+</body>
+
+</html>
