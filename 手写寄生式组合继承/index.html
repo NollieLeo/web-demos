@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    function createObject(prototype) {
+      function Fn() { };
+      Fn.prototype = prototype;
+      return new Fn();
+    }
+
+    function inherit(Type, SuperType) {
+      let prototype = createObject(SuperType.prototype);
+      Object.defineProperty(prototype, 'contructor', {
+        enumerable: false,
+        value: Type
+      })
+      Type.prototype = prototype;
+    }
+
+    function SubType() {
+      this.name = 'weng';
+    }
+
+    function Super() {
+      this.age = '12'
+    }
+
+    inherit(SubType, Super);
+
+    const a = new SubType();
+    for (const key in a) {
+      // if (Object.hasOwnProperty.call(a, key)) {
+      const element = a[key];
+      console.log(element)
+      // }
+    }
+  </script>
+</body>
+
+</html>
