@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    body {
+      height: 100vh;
+      width: 100vw;
+    }
+
+    img {
+      width: 400px;
+      height: 400px;
+      display: block;
+    }
+  </style>
+</head>
+
+<body>
+  <img src="./images/0.jpg" data-src="./images/1.gif">
+  <img src="./images/0.jpg" data-src="./images/2.png">
+  <img src="./images/0.jpg" data-src="./images/3.jpg">
+  <img src="./images/0.jpg" data-src="./images/f.png">
+  <img src="./images/0.jpg" data-src="./images/John-Wick.jpg">
+  <img src="./images/0.jpg" data-src="./images/redis.png">
+  <script>
+    function lazyLoad() {
+      let viewHeight = document.body.clientHeight;
+      let imgsLists = document.querySelectorAll('img[data-src]');
+      imgsLists.forEach((item) => {
+        if (!item.dataset.src) return;
+        let rect = item.getBoundingClientRect();
+        if (rect.bottom >= 0 && rect.top < viewHeight) {
+          item.src = item.dataset.src;
+          item.removeAttribute('data-src')
+        }
+      })
+    }
+
+    window.addEventListener('scroll', lazyLoad)
+  </script>
+</body>
+
+</html>
