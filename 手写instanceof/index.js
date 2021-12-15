@@ -11,6 +11,7 @@ function _instanceof (obj, Fn) {
     proto = proto.__proto__;
   }
 }
+
 function Person () {
   this.name = 'weng'
 }
